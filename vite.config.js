@@ -1,14 +1,14 @@
-import {
-    defineConfig
-} from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig, loadEnv } from "vite";
+import react from "@vitejs/plugin-react";
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  return {
     plugins: [react()],
     server: {
-        port: 3000
+      port: parseInt(env.VITE_PORT) || 3000,
     },
     build: {
-        outDir: 'dist'
-    }
-})
+      outDir: "dist",
+    },
+  };
+});
