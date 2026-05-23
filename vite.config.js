@@ -7,6 +7,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       host: "0.0.0.0",
+      allowedHosts:["caloric-ai-front-2.onrender.com"],
       port: parseInt(env.VITE_PORT) || 3000,
     },
     build: {
