@@ -1,4 +1,4 @@
-export default function GreetingCard({ caloriesPercent, userName }) {
+export default function GreetingCard({ caloriesPercent, userName = "" }) {
   const now = new Date();
   const hour = now.getHours();
   const timeOfDay = hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
@@ -6,14 +6,14 @@ export default function GreetingCard({ caloriesPercent, userName }) {
     .toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })
     .toUpperCase();
 
-  // Extract only the first name before the space
-  const firstName = userName ? userName.trim().split(" ")[0] : "";
-
   return (
     <div className="greeting-card">
       <div className="greeting-date">{dateStr}</div>
       <h1 className="greeting-title">
-        Good {timeOfDay}{firstName ? `, ` : ``}<span>{firstName ? `${firstName}.` : ``}</span>
+        {userName
+          ? <>Good {timeOfDay}, <span>{userName}.</span></>
+          : <>Good <span>{timeOfDay}.</span></>
+        }
       </h1>
       <p className="greeting-sub">What did you eat today?</p>
     </div>

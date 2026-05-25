@@ -338,8 +338,12 @@ body {
 
 .nav-dropdown-email {
   font-size: 0.75rem;
-  color: rgba(60, 40, 20, 0.5);
+  color: rgba(60,40,20,0.5);
   font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
 }
 
 .nav-dropdown-divider {
