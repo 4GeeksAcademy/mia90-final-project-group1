@@ -116,8 +116,9 @@ export const Settings = () => {
 
             // Save metric reference for unit conversion
             setMetricHealth({
-              weight_kg: weight_kg || null,
-              height_cm: height_cm || null,
+              weight_kg:     weight_kg     || null,
+              height_cm:     height_cm     || null,
+              target_weight: target_weight || null,
             });
 
             // Display values based on user's preferred unit
@@ -169,10 +170,8 @@ export const Settings = () => {
         height_in:     metricHealth.height_cm ? Math.round((metricHealth.height_cm / 2.54) % 12)       : "",
         height_cm:     "",
         weight_kg:     "",
-        target_weight: prev.target_weight && metricHealth.weight_kg
-          ? Math.round(parseFloat(prev.target_weight) / 0.453592)
-          : prev.target_weight,
-      }));
+      target_weight: metricHealth.target_weight ? Math.round(metricHealth.target_weight / 0.453592) : prev.target_weight,
+    }));
     } else {
       setHealth(prev => ({
         weight:        "",
@@ -180,10 +179,8 @@ export const Settings = () => {
         height_in:     "",
         weight_kg:     metricHealth.weight_kg || "",
         height_cm:     metricHealth.height_cm || "",
-        target_weight: prev.target_weight && metricHealth.weight_kg
-          ? Math.round(parseFloat(prev.target_weight) * 0.453592 * 10) / 10
-          : prev.target_weight,
-      }));
+        target_weight: metricHealth.target_weight || prev.target_weight,
+    }));
     }
   }, [unit]);
 
@@ -457,7 +454,12 @@ const handlePhotoChange = (e) => {
                   <label className="field-label">Target Weight (lbs)</label>
                   <input className="field-input" type="number" placeholder="150"
                     value={health.target_weight}
-                    onChange={(e) => setHealth({ ...health, target_weight: e.target.value })} />
+                    onChange={(e) => {
+                      setHealth({ ...health, target_weight: e.target.value });
+                      const val = parseFloat(e.target.value);
+                      const kg  = val * 0.453592;  // siempre convierte de lbs a kg
+                      setMetricHealth(prev => ({ ...prev, target_weight: isNaN(kg) ? null : Math.round(kg * 10) / 10 }));
+                    }} />
                 </div>
                 <div className="settings-field-row">
                   <div className="settings-field">
@@ -505,7 +507,12 @@ const handlePhotoChange = (e) => {
                   <label className="field-label">Target Weight (kg)</label>
                   <input className="field-input" type="number" placeholder="70"
                     value={health.target_weight}
-                    onChange={(e) => setHealth({ ...health, target_weight: e.target.value })} />
+                    onChange={(e) => {
+                      setHealth({ ...health, target_weight: e.target.value });
+                      const val = parseFloat(e.target.value);
+                      const kg  = unit === "imperial" ? val * 0.453592 : val;
+                      setMetricHealth(prev => ({ ...prev, target_weight: isNaN(kg) ? null : Math.round(kg * 10) / 10 }));
+                    }} />
                 </div>
                 <div className="settings-field">
                   <label className="field-label">Height (cm)</label>
